@@ -1,10 +1,10 @@
 import http from "http";
 import { Server } from "socket.io";
 import app from "./app.js";
+import { chatSocket } from "./sockets/chat.socket.js";
 
 const server = http.createServer(app);
 
-/* ---------- SOCKET.IO ---------- */
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -12,14 +12,6 @@ const io = new Server(server, {
   },
 });
 
-/* ---------- SOCKET EVENTS ---------- */
-io.on("connection", (socket) => {
-  console.log("🟢 User connected:", socket.id);
+chatSocket(io);
 
-  socket.on("disconnect", () => {
-    console.log("🔴 User disconnected:", socket.id);
-  });
-});
-
-/* ---------- EXPORT ---------- */
 export { server, io };
